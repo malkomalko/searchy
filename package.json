@@ -15,12 +15,19 @@
     ],
     "main": "./extension",
     "contributes": {
-        "commands": [
-            {
-                "command": "searchy.search",
-                "title": "Searchy - Search"
-            }
-        ]
+        "commands": [{
+            "command": "searchy.search",
+            "title": "Searchy - Search"
+        }],
+        "languages": [{
+            "id": "searchy",
+            "aliases": [
+                "Searchy"
+            ],
+            "extensions": [
+                ".searchy"
+            ]
+        }]
     },
     "scripts": {
         "postinstall": "node ./node_modules/vscode/bin/install",
