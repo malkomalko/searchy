@@ -20,7 +20,7 @@ module.exports = function TextDocumentContentProvider() {
     try {
       searchResults = runCommandSync(cmd)
     } catch (err) {
-      return vscode.window.showErrorMessage(err.message)
+      return renderHTML(`<h1><b>${err}</b></h1>`)
     }
 
     if (searchResults == null || !searchResults.length) {
