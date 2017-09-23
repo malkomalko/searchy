@@ -47,7 +47,7 @@ module.exports = function TextDocumentContentProvider() {
         return `<p> - ${searchResult}</p>`
       }).join('')
       return `
-      <h3>=> <a href="#">${fileName}</a></h3>
+      <h3>=> <a href="${openLink(fileName)}">${fileName}</a></h3>
       ${resultsForFile}
       `
     })
@@ -62,6 +62,13 @@ module.exports = function TextDocumentContentProvider() {
 
 function formatLine(splitLine) {
   return splitLine[1]
+}
+
+function openLink(fileName) {
+  var params = {
+    fileName: fileName
+  }
+  return encodeURI('command:searchy.openFile?' + JSON.stringify(params))
 }
 
 function renderHTML(body) {

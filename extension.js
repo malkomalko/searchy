@@ -1,5 +1,6 @@
 const vscode = require('vscode')
 const SearchyProvider = require('./provider')
+const commands = require('./commands')
 
 function activate(context) {
   let provider = new SearchyProvider()
@@ -28,7 +29,11 @@ function activate(context) {
     })
   })
 
-  context.subscriptions.push(disposable, registration)
+  context.subscriptions.push(
+    disposable,
+    registration,
+    vscode.commands.registerCommand('searchy.openFile', commands.openFile)
+  )
 }
 exports.activate = activate
 
