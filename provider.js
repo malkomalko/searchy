@@ -48,7 +48,7 @@ module.exports = function TextDocumentContentProvider() {
 
     let lines = sortedFiles.map((fileName) => {
       let resultsForFile = resultsByFile[fileName].map((searchResult) => {
-        return `<p> - ${searchResult}</p>`
+        return `<p> - ${searchResult.result}</p>`
       }).join('')
       return `
       <h3>=> <a href="${openLink(fileName)}">${fileName}</a></h3>
@@ -65,7 +65,10 @@ module.exports = function TextDocumentContentProvider() {
 }
 
 function formatLine(splitLine) {
-  return splitLine[3]
+  return {
+    line: splitLine[2],
+    result: splitLine[3]
+  }
 }
 
 function openLink(fileName) {
