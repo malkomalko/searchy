@@ -2,7 +2,6 @@ const vscode = require('vscode')
 const querystring = require('querystring')
 const rgPath = require('vscode-ripgrep').rgPath
 const {
-  exec,
   execSync
 } = require('child_process')
 
@@ -91,17 +90,6 @@ function renderHTML(body) {
   <body>
     ${body}
   </body>`
-}
-
-function runCommand(cmd, callback) {
-  exec(`${rgPath} ${cmd}`, execOpts, (err, stdout, stderr) => {
-    const searchResults = stdout
-    if (err == null && !stderr.length) {
-      callback(null, searchResults)
-    } else {
-      callback(err)
-    }
-  })
 }
 
 function runCommandSync(cmd) {
