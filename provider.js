@@ -27,8 +27,32 @@ module.exports = function TextDocumentContentProvider() {
       return renderHTML('<b>There was an error during your search!</b>')
     }
 
-    let lines = searchResults.toString().split('\n')
-    let header = [`<h1><b>${lines.length}</b> search results found</h1>`]
+    let resultsArray = searchResults.toString().split('\n')
+    let resultsByFile = {}
+
+    resultsArray.forEach((searchResult) => {
+      let splitLine = searchResult.split(/:(.+)/)
+      if (splitLine[0] == null || !splitLine[0].length) {
+        return
+      }
+      if (resultsByFile[splitLine[0]] == null) {
+        resultsByFile[splitLine[0]] = []
+      }
+      resultsByFile[splitLine[0]].push(formatLine(splitLine))
+    })
+
+    let sortedFiles = Object.keys(resultsByFile).sort()
+
+    let lines = sortedFiles.map((fileName) => {
+      let resultsForFile = resultsByFile[fileName].map((searchResult) => {
+        return `<p> - ${searchResult}</p>`
+      }).join('')
+      return `
+      <h3>=> <a href="#">${fileName}</a></h3>
+      ${resultsForFile}
+      `
+    })
+    let header = [`<h1><b>${resultsArray.length}</b> search results found</h1>`]
     let content = header.concat(lines)
 
     return renderHTML(content.join('<br>'))
@@ -37,12 +61,30 @@ module.exports = function TextDocumentContentProvider() {
   this.scheme = 'searchy'
 }
 
+function formatLine(splitLine) {
+  return splitLine[1]
+}
+
 function renderHTML(body) {
   return `
   <head>
   <style>
+  body {
+    font-family: 'Hack';
+  }
   a {
-    color: #0072be;
+    color: #61afef;
+    margin: 0;
+    padding: 0;
+  }
+  h3 {
+    color: #98c379;
+    margin: 0 0 15px 0;
+    padding: 0;
+  }
+  p {
+    margin: 0 0 3px 0;
+    padding: 0;
   }
   </style>
   </head>
