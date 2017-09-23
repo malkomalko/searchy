@@ -48,7 +48,7 @@ module.exports = function TextDocumentContentProvider() {
 
     let lines = sortedFiles.map((fileName) => {
       let resultsForFile = resultsByFile[fileName].map((searchResult) => {
-        return `<p> - ${searchResult.result}</p>`
+        return `<p><a href="${openLink(fileName, searchResult.line)}">${searchResult.line}</a>: ${searchResult.result}</p>`
       }).join('')
       return `
       <h3>=> <a href="${openLink(fileName)}">${fileName}</a></h3>
@@ -71,9 +71,10 @@ function formatLine(splitLine) {
   }
 }
 
-function openLink(fileName) {
+function openLink(fileName, line) {
   var params = {
-    fileName: fileName
+    fileName: fileName,
+    line: line
   }
   return encodeURI('command:searchy.openFile?' + JSON.stringify(params))
 }
