@@ -27,17 +27,21 @@ module.exports = function TextDocumentContentProvider() {
     }
 
     let resultsArray = searchResults.toString().split('\n')
+    resultsArray = resultsArray.filter((item) => {
+      return item != null && item.length > 0
+    })
     let resultsByFile = {}
 
     resultsArray.forEach((searchResult) => {
-      let splitLine = searchResult.split(/:(.+)/)
-      if (splitLine[0] == null || !splitLine[0].length) {
+      let splitLine = searchResult.split(/([^:]+):([^:]+):(.+)/)
+      let fileName = splitLine[1]
+      if (fileName == null || !fileName.length) {
         return
       }
-      if (resultsByFile[splitLine[0]] == null) {
-        resultsByFile[splitLine[0]] = []
+      if (resultsByFile[fileName] == null) {
+        resultsByFile[fileName] = []
       }
-      resultsByFile[splitLine[0]].push(formatLine(splitLine))
+      resultsByFile[fileName].push(formatLine(splitLine))
     })
 
     let sortedFiles = Object.keys(resultsByFile).sort()
@@ -61,7 +65,7 @@ module.exports = function TextDocumentContentProvider() {
 }
 
 function formatLine(splitLine) {
-  return splitLine[1]
+  return splitLine[3]
 }
 
 function openLink(fileName) {
@@ -100,5 +104,5 @@ function renderHTML(body) {
 }
 
 function runCommandSync(cmd) {
-  return execSync(`${rgPath} ${cmd}`, execOpts)
+  return execSync(`${rgPath} -n ${cmd}`, execOpts)
 }
