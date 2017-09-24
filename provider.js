@@ -60,6 +60,10 @@ ${resultsForFile}`
     return content.join('\n')
   }
 
+  this.provideDocumentLinks = function (document, token) {
+    return []
+  }
+
   this.scheme = 'searchy'
 }
 

@@ -1,5 +1,7 @@
 const {
   commands,
+  Disposable,
+  languages,
   Uri,
   window,
   workspace
@@ -9,8 +11,12 @@ const searchyCommands = require('./commands')
 
 function activate(context) {
   let provider = new SearchyProvider()
-  let registration = workspace.registerTextDocumentContentProvider(
-    provider.scheme, provider
+
+  const providerRegistrations = Disposable.from(
+    workspace.registerTextDocumentContentProvider(provider.scheme, provider),
+    languages.registerDocumentLinkProvider({
+      scheme: provider.scheme
+    }, provider)
   )
 
   const disposable = commands.registerCommand('searchy.search', function () {
@@ -32,7 +38,7 @@ function activate(context) {
 
   context.subscriptions.push(
     disposable,
-    registration,
+    providerRegistrations,
     commands.registerCommand('searchy.openFile', searchyCommands.openFile)
   )
 }
