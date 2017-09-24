@@ -24,6 +24,8 @@ class SearchyProvider {
   onDidChange() {}
 
   provideTextDocumentContent(uri) {
+    let uriString = uri.toString()
+    this.links[uriString] = []
     const params = querystring.parse(uri.query)
     const cmd = params.cmd
 
@@ -64,7 +66,7 @@ class SearchyProvider {
       lineNumber += 1
       let resultsForFile = resultsByFile[fileName].map((searchResult, index) => {
         lineNumber += 1
-        this.createDocumentLink(searchResult, lineNumber, cmd)
+        this.createDocumentLink(searchResult, lineNumber, cmd, uriString)
         return `  ${searchResult.line}: ${searchResult.result}`
       }).join('\n')
       lineNumber += 1
@@ -78,11 +80,11 @@ ${resultsForFile}`
     return content.join('\n')
   }
 
-  provideDocumentLinks(document, token) {
-    return this.links
+  provideDocumentLinks(document) {
+    return this.links[document.uri.toString()]
   }
 
-  createDocumentLink(formattedLine, lineNumber, cmd) {
+  createDocumentLink(formattedLine, lineNumber, cmd, docURI) {
     const {
       file,
       line,
@@ -98,7 +100,7 @@ ${resultsForFile}`
       preamble + col + searchTerm
     )
     const uri = vscode.Uri.parse(`file://${rootPath}/${file}#${line}`)
-    this.links.push(new vscode.DocumentLink(linkRange, uri))
+    this.links[docURI].push(new vscode.DocumentLink(linkRange, uri))
   }
 }
 
@@ -122,5 +124,6 @@ function openLink(fileName, line) {
 }
 
 function runCommandSync(cmd) {
-  return execSync(`${rgPath} --case-sensitive --line-number --column ${cmd}`, execOpts)
+  let cleanedCommand = cmd.replace(/"/g, "\\\"")
+  return execSync(`${rgPath} --case-sensitive --line-number --column "${cleanedCommand}"`, execOpts)
 }
