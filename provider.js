@@ -92,7 +92,7 @@ ${resultsForFile}`
     } = formattedLine
     const col = parseInt(column, 10)
     const preamble = `  ${line}:`.length
-    const searchTerm = cmd.length
+    const searchTerm = formattedLine.result.match(cmd)[0].length
     const linkRange = new vscode.Range(
       lineNumber,
       preamble + col,
@@ -125,5 +125,5 @@ function openLink(fileName, line) {
 
 function runCommandSync(cmd) {
   let cleanedCommand = cmd.replace(/"/g, "\\\"")
-  return execSync(`${rgPath} --case-sensitive --line-number --column "${cleanedCommand}"`, execOpts)
+  return execSync(`${rgPath} --case-sensitive --line-number --column -e "${cleanedCommand}"`, execOpts)
 }
