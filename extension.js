@@ -28,7 +28,7 @@ function activate(context) {
     }).then((cmd) => {
       if (cmd && cmd.length) {
         var uri = Uri.parse(SearchyProvider.scheme +
-          `:results.searchy?cmd=${cmd}`)
+          `:${fileName(cmd)}.searchy?cmd=${cmd}`)
         return workspace.openTextDocument(uri).then(doc =>
           window.showTextDocument(doc, {
             preview: false,
@@ -49,3 +49,7 @@ exports.activate = activate
 
 function deactivate() {}
 exports.deactivate = deactivate
+
+function fileName(cmd) {
+  return cmd.replace(/[^a-z0-9]/gi, '_').substring(0, 10)
+}
