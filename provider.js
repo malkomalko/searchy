@@ -54,16 +54,20 @@ class SearchyProvider {
         resultsByFile[fileName] = []
       }
       const formattedLine = formatLine(splitLine)
-      this.createDocumentLink(formattedLine)
       resultsByFile[fileName].push(formattedLine)
     })
 
     let sortedFiles = Object.keys(resultsByFile).sort()
+    let lineNumber = 1
 
     let lines = sortedFiles.map((fileName) => {
-      let resultsForFile = resultsByFile[fileName].map((searchResult) => {
+      lineNumber += 1
+      let resultsForFile = resultsByFile[fileName].map((searchResult, index) => {
+        lineNumber += 1
+        this.createDocumentLink(searchResult, lineNumber, cmd)
         return `  ${searchResult.line}: ${searchResult.result}`
       }).join('\n')
+      lineNumber += 1
       return `
 file://${rootPath}/${fileName}
 ${resultsForFile}`
@@ -78,8 +82,26 @@ ${resultsForFile}`
     return this.links
   }
 
-  createDocumentLink(formattedLine) {
-
+  createDocumentLink(formattedLine, lineNumber, cmd) {
+    const {
+      file,
+      line,
+      column
+    } = formattedLine
+    const col = parseInt(column, 10)
+    const preamble = `  ${line}:`.length
+    const searchTerm = cmd.length
+    const linkRange = new vscode.Range(
+      lineNumber,
+      preamble + col,
+      lineNumber,
+      preamble + col + searchTerm
+    )
+    const uri = vscode.Uri.parse(`file://${rootPath}/${file}`)
+    const linkTarget = uri.with({
+      fragment: String(line)
+    })
+    this.links.push(new vscode.DocumentLink(linkRange, linkTarget))
   }
 }
 
