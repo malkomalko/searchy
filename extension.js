@@ -22,7 +22,7 @@ function activate(context) {
   const disposable = commands.registerCommand('searchy.search', function () {
     window.showInputBox({
       value: null,
-      prompt: "Uses ripgrep. e.g [foo -g 'README.*']",
+      prompt: null,
       placeHolder: "Search term...",
       password: false
     }).then((cmd) => {
