@@ -16,6 +16,10 @@ N/A
 
 ## Release Notes
 
+### 0.0.2
+
+Search hidden files by default
+
 ### 0.0.1
 
 Initial release

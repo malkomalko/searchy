@@ -136,5 +136,5 @@ function openLink(fileName, line) {
 
 function runCommandSync(cmd) {
   let cleanedCommand = cmd.replace(/"/g, "\\\"")
-  return execSync(`${rgPath} --case-sensitive --line-number --column -e "${cleanedCommand}"`, execOpts)
+  return execSync(`${rgPath} --case-sensitive --line-number --column --hidden -e "${cleanedCommand}"`, execOpts)
 }
