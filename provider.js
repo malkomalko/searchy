@@ -5,8 +5,10 @@ const {
   execSync
 } = require('child_process')
 
+const rootPath = vscode.workspace.rootPath
+
 const execOpts = {
-  cwd: vscode.workspace.rootPath,
+  cwd: rootPath,
   maxBuffer: 1024 * 1000
 }
 
@@ -59,7 +61,7 @@ class SearchyProvider {
         return `  ${searchResult.line}: ${searchResult.result}`
       }).join('\n')
       return `
-file:${fileName}
+file://${rootPath}/${fileName}
 ${resultsForFile}`
     })
     let header = [`${resultsArray.length} search results found`]
