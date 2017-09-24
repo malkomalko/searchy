@@ -13,9 +13,9 @@ function activate(context) {
   let provider = new SearchyProvider()
 
   const providerRegistrations = Disposable.from(
-    workspace.registerTextDocumentContentProvider(provider.scheme, provider),
+    workspace.registerTextDocumentContentProvider(SearchyProvider.scheme, provider),
     languages.registerDocumentLinkProvider({
-      scheme: provider.scheme
+      scheme: SearchyProvider.scheme
     }, provider)
   )
 
@@ -27,7 +27,7 @@ function activate(context) {
       password: false
     }).then((cmd) => {
       if (cmd && cmd.length) {
-        var uri = Uri.parse(provider.scheme +
+        var uri = Uri.parse(SearchyProvider.scheme +
           `:results.searchy?cmd=${cmd}`)
         return workspace.openTextDocument(uri).then(doc =>
           window.showTextDocument(doc, 1)

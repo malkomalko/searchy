@@ -10,8 +10,16 @@ const execOpts = {
   maxBuffer: 1024 * 1000
 }
 
-module.exports = function TextDocumentContentProvider() {
-  this.provideTextDocumentContent = function (uri) {
+class SearchyProvider {
+  constructor() {}
+
+  static get scheme() {
+    return 'searchy'
+  }
+
+  onDidChange() {}
+
+  provideTextDocumentContent(uri) {
     const params = querystring.parse(uri.query)
     const cmd = params.cmd
 
@@ -60,12 +68,12 @@ ${resultsForFile}`
     return content.join('\n')
   }
 
-  this.provideDocumentLinks = function (document, token) {
+  provideDocumentLinks(document, token) {
     return []
   }
-
-  this.scheme = 'searchy'
 }
+
+module.exports = SearchyProvider
 
 function formatLine(splitLine) {
   return {
