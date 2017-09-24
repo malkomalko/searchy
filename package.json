@@ -4,6 +4,7 @@
     "description": "Dumb search with results in a new document",
     "version": "0.0.1",
     "publisher": "malkomalko",
+    "repository": "malkomalko/searchy",
     "engines": {
         "vscode": "^1.16.0"
     },
