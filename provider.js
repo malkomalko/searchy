@@ -97,11 +97,8 @@ ${resultsForFile}`
       lineNumber,
       preamble + col + searchTerm
     )
-    const uri = vscode.Uri.parse(`file://${rootPath}/${file}`)
-    const linkTarget = uri.with({
-      fragment: String(line)
-    })
-    this.links.push(new vscode.DocumentLink(linkRange, linkTarget))
+    const uri = vscode.Uri.parse(`file://${rootPath}/${file}#${line}`)
+    this.links.push(new vscode.DocumentLink(linkRange, uri))
   }
 }
 
