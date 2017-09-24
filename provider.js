@@ -33,7 +33,7 @@ module.exports = function TextDocumentContentProvider() {
     let resultsByFile = {}
 
     resultsArray.forEach((searchResult) => {
-      let splitLine = searchResult.split(/([^:]+):([^:]+):(.+)/)
+      let splitLine = searchResult.split(/([^:]+):([^:]+):([^:]+):(.+)/)
       let fileName = splitLine[1]
       if (fileName == null || !fileName.length) {
         return
@@ -48,7 +48,7 @@ module.exports = function TextDocumentContentProvider() {
 
     let lines = sortedFiles.map((fileName) => {
       let resultsForFile = resultsByFile[fileName].map((searchResult) => {
-        return `${searchResult.result}`
+        return `  ${searchResult.line}: ${searchResult.result}`
       }).join('\n')
       return `
 file:${fileName}
@@ -66,7 +66,8 @@ ${resultsForFile}`
 function formatLine(splitLine) {
   return {
     line: splitLine[2],
-    result: splitLine[3]
+    column: splitLine[3],
+    result: splitLine[4]
   }
 }
 
@@ -79,5 +80,5 @@ function openLink(fileName, line) {
 }
 
 function runCommandSync(cmd) {
-  return execSync(`${rgPath} -n ${cmd}`, execOpts)
+  return execSync(`${rgPath} --case-sensitive --line-number --column ${cmd}`, execOpts)
 }
