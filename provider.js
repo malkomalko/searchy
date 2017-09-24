@@ -53,7 +53,9 @@ class SearchyProvider {
       if (resultsByFile[fileName] == null) {
         resultsByFile[fileName] = []
       }
-      resultsByFile[fileName].push(formatLine(splitLine))
+      const formattedLine = formatLine(splitLine)
+      this.createDocumentLink(formattedLine)
+      resultsByFile[fileName].push(formattedLine)
     })
 
     let sortedFiles = Object.keys(resultsByFile).sort()
@@ -75,12 +77,17 @@ ${resultsForFile}`
   provideDocumentLinks(document, token) {
     return this.links
   }
+
+  createDocumentLink(formattedLine) {
+
+  }
 }
 
 module.exports = SearchyProvider
 
 function formatLine(splitLine) {
   return {
+    file: splitLine[1],
     line: splitLine[2],
     column: splitLine[3],
     result: splitLine[4]
