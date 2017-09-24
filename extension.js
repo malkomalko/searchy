@@ -30,7 +30,10 @@ function activate(context) {
         var uri = Uri.parse(SearchyProvider.scheme +
           `:results.searchy?cmd=${cmd}`)
         return workspace.openTextDocument(uri).then(doc =>
-          window.showTextDocument(doc, 1)
+          window.showTextDocument(doc, {
+            preview: false,
+            viewColumn: 1
+          })
         )
       }
     })
