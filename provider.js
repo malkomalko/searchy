@@ -13,7 +13,9 @@ const execOpts = {
 }
 
 class SearchyProvider {
-  constructor() {}
+  constructor() {
+    this.links = []
+  }
 
   static get scheme() {
     return 'searchy'
@@ -71,7 +73,7 @@ ${resultsForFile}`
   }
 
   provideDocumentLinks(document, token) {
-    return []
+    return this.links
   }
 }
 
