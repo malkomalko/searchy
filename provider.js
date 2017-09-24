@@ -19,11 +19,11 @@ module.exports = function TextDocumentContentProvider() {
     try {
       searchResults = runCommandSync(cmd)
     } catch (err) {
-      return renderHTML(`<h1><b>${err}</b></h1>`)
+      return `${err}`
     }
 
     if (searchResults == null || !searchResults.length) {
-      return renderHTML('<b>There was an error during your search!</b>')
+      return 'There was an error during your search!'
     }
 
     let resultsArray = searchResults.toString().split('\n')
@@ -48,17 +48,16 @@ module.exports = function TextDocumentContentProvider() {
 
     let lines = sortedFiles.map((fileName) => {
       let resultsForFile = resultsByFile[fileName].map((searchResult) => {
-        return `<p><a href="${openLink(fileName, searchResult.line)}">${searchResult.line}</a>: ${searchResult.result}</p>`
-      }).join('')
+        return `${searchResult.result}`
+      }).join('\n')
       return `
-      <h3>=> <a href="${openLink(fileName)}">${fileName}</a></h3>
-      ${resultsForFile}
-      `
+${fileName}
+${resultsForFile}`
     })
-    let header = [`<h1><b>${resultsArray.length}</b> search results found</h1>`]
+    let header = [`${resultsArray.length} search results found`]
     let content = header.concat(lines)
 
-    return renderHTML(content.join('<br>'))
+    return content.join('\n')
   }
 
   this.scheme = 'searchy'
@@ -77,34 +76,6 @@ function openLink(fileName, line) {
     line: line
   }
   return encodeURI('command:searchy.openFile?' + JSON.stringify(params))
-}
-
-function renderHTML(body) {
-  return `
-  <head>
-  <style>
-  body {
-    font-family: 'Hack';
-  }
-  a {
-    color: #61afef;
-    margin: 0;
-    padding: 0;
-  }
-  h3 {
-    color: #98c379;
-    margin: 0 0 15px 0;
-    padding: 0;
-  }
-  p {
-    margin: 0 0 3px 0;
-    padding: 0;
-  }
-  </style>
-  </head>
-  <body>
-    ${body}
-  </body>`
 }
 
 function runCommandSync(cmd) {
