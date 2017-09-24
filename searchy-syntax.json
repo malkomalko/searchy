@@ -4,5 +4,8 @@
   "patterns": [{
     "name": "comment.line.file",
     "match": "file:.*$"
+  }, {
+    "name": "keyword.locations",
+    "match": "  \\d+:"
   }]
 }
