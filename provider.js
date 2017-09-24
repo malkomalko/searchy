@@ -51,7 +51,7 @@ module.exports = function TextDocumentContentProvider() {
         return `${searchResult.result}`
       }).join('\n')
       return `
-${fileName}
+file:${fileName}
 ${resultsForFile}`
     })
     let header = [`${resultsArray.length} search results found`]

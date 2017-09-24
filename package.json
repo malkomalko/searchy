@@ -27,6 +27,11 @@
             "extensions": [
                 ".searchy"
             ]
+        }],
+        "grammars": [{
+            "language": "searchy",
+            "path": "./searchy-syntax.json",
+            "scopeName": "source.searchy"
         }]
     },
     "scripts": {

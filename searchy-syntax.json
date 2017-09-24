@@ -1,0 +1,8 @@
+{
+  "name": "Searchy",
+  "scopeName": "source.searchy",
+  "patterns": [{
+    "name": "comment.line.file",
+    "match": "file:.*$"
+  }]
+}
