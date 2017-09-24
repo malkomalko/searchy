@@ -15,6 +15,13 @@ const execOpts = {
 class SearchyProvider {
   constructor() {
     this.links = []
+    this._subscriptions = vscode.workspace.onDidCloseTextDocument(doc => {
+      this.links[doc.uri.toString()] = []
+    })
+  }
+
+  dispose() {
+    this._subscriptions.dispose()
   }
 
   static get scheme() {
@@ -92,7 +99,11 @@ ${resultsForFile}`
     } = formattedLine
     const col = parseInt(column, 10)
     const preamble = `  ${line}:`.length
-    const searchTerm = formattedLine.result.match(cmd)[0].length
+    const match = formattedLine.result.match(cmd)
+    if (match == null) {
+      return
+    }
+    const searchTerm = match[0].length
     const linkRange = new vscode.Range(
       lineNumber,
       preamble + col,
